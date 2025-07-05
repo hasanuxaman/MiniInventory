@@ -1,0 +1,69 @@
+﻿@page
+@model MiniInventory.UI.Pages.Stock.ManageStockModel
+@{
+    ViewData["Title"] = "Stock In/Out";
+}
+
+<h2>Multi Product Stock In/Out</h2>
+
+<form method="post" id="stock-form">
+    <div id="product-rows">
+        <!-- Default row -->
+        <div class="product-row border p-3 mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Product</label>
+                    <select name="Transactions[0].ProductId" class="form-select">
+                        <option value="">Select Product</option>
+                        @foreach (var item in Model.Products)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Quantity</label>
+                    <input name="Transactions[0].Quantity" type="number" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Type</label>
+                    <select name="Transactions[0].Type" class="form-select">
+                        <option value="IN">IN</option>
+                        <option value="OUT">OUT</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-info mb-3" onclick="addRow()">➕ Add Product</button>
+    <br />
+    <button type="submit" class="btn btn-success">Submit</button>
+    <a asp-page="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        let rowIndex = 1;
+
+        function addRow() {
+            const productRow = document.querySelector('.product-row');
+            const newRow = productRow.cloneNode(true);
+
+            newRow.querySelectorAll('select, input').forEach(function (el) {
+                const name = el.getAttribute('name');
+                if (name) {
+                    const newName = name.replace(/\[\d+\]/, `[${rowIndex}]`);
+                    el.setAttribute('name', newName);
+                }
+                if (el.tagName === 'SELECT' || el.tagName === 'INPUT') {
+                    el.value = '';
+                }
+            });
+
+            document.getElementById('product-rows').appendChild(newRow);
+            rowIndex++;
+        }
+    </script>
+}

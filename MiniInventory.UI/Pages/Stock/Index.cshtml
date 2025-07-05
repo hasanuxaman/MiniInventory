@@ -1,0 +1,33 @@
+﻿@page
+@model MiniInventory.UI.Pages.Stock.IndexModel
+
+@{
+    ViewData["Title"] = "Stock Transactions";
+}
+
+<h2 class="mb-4">Stock Transactions</h2>
+
+<a asp-page="ManageStock" class="btn btn-primary mb-3">+ Stock In/Out</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Type</th>
+            <th>Transaction Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Transactions)
+        {
+            <tr>
+                <td>@item.ProductId</td>
+                <td>@item.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.Type</td>
+                <td>@item.TransactionDate.ToString("yyyy-MM-dd")</td>
+            </tr>
+        }
+    </tbody>
+</table>
