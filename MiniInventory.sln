@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniInventory.API", "MiniIn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniInventory.UI", "MiniInventory.UI\MiniInventory.UI.csproj", "{1C1044A3-0701-4ECA-BD2C-CD4678FA7233}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniInventory.Infrastructure", "MiniInventory.Infrastructure\MiniInventory.Infrastructure.csproj", "{B522B6DB-421D-4C8A-A04F-5066C6AECDEF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{1C1044A3-0701-4ECA-BD2C-CD4678FA7233}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C1044A3-0701-4ECA-BD2C-CD4678FA7233}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C1044A3-0701-4ECA-BD2C-CD4678FA7233}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B522B6DB-421D-4C8A-A04F-5066C6AECDEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B522B6DB-421D-4C8A-A04F-5066C6AECDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B522B6DB-421D-4C8A-A04F-5066C6AECDEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B522B6DB-421D-4C8A-A04F-5066C6AECDEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

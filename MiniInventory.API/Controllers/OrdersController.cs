@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MiniInventory.API.Interfaces;
 using MiniInventory.API.Models;
+using MiniInventory.API.Repositories;
 
 namespace MiniInventory.API.Controllers
 {
@@ -17,12 +18,16 @@ namespace MiniInventory.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _repo.GetAllAsync());
+        [Route("GetAllOrder")]
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAllOrder() => Ok(await _repo.GetAllOrdersAsync());
+
+        [HttpGet]
+        [Route("GetOrderById")]
+
+        public async Task<IActionResult> GetOrderById(int id)
         {
-            var order = await _repo.GetByIdAsync(id);
+            var order = await _repo.GetOrderByIdAsync(id);
             return order is null ? NotFound() : Ok(order);
         }
 
@@ -30,19 +35,25 @@ namespace MiniInventory.API.Controllers
         [Route("AddOrder")]
         public async Task<IActionResult> AddOrder(Order order)
         {
-            await _repo.AddAsync(order);
-            return Ok();
+            var orderId = await _repo.AddOrderAsync(order);
+            return Ok(new { OrderId = orderId });
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Order order)
+        [Route("UpdateOrderbyId")]
+        public async Task<IActionResult> UpdateOrder(int id, [FromBody] Order orderDto)
         {
-            await _repo.UpdateAsync(order);
-            return Ok();
+            var success = await _repo.UpdateAsync(id, orderDto);
+            if (success)
+                return Ok(new { Message = "Order updated successfully." });
+            else
+                return BadRequest(new { Message = "Failed to update order." });
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete]
+        [Route("DeleteOrderById")]
+
+        public async Task<IActionResult> DeleteOrderById(int id)
         {
             await _repo.DeleteAsync(id);
             return Ok();

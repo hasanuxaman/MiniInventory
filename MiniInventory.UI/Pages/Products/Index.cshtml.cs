@@ -13,7 +13,7 @@ namespace MiniInventory.UI.Pages.Products
         {
             using var httpClient = new HttpClient();
 
-            string apiUrl = "https://localhost:7004/api/products";
+            string apiUrl = "https://localhost:7004/api/Products/GetProductAll";
 
             var response = await httpClient.GetAsync(apiUrl);
 

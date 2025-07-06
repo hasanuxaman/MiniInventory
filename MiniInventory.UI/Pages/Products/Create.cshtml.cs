@@ -23,7 +23,7 @@ public class CreateModel : PageModel
     public async Task OnGetAsync()
     {
         var client = _httpClientFactory.CreateClient("API");
-        var categories = await client.GetFromJsonAsync<List<Category>>("categories");
+        var categories = await client.GetFromJsonAsync<List<Category>>("Categories/GetCategoryAll");
         if (categories != null)
             Categories = categories;
     }
@@ -34,7 +34,7 @@ public class CreateModel : PageModel
             return Page();
 
         var client = _httpClientFactory.CreateClient("API");
-        var response = await client.PostAsJsonAsync("products", Product);
+        var response = await client.PostAsJsonAsync("Products/AddProduct", Product);
         if (response.IsSuccessStatusCode)
             return RedirectToPage("Index");
 
