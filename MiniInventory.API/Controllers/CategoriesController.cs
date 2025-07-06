@@ -14,14 +14,16 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    [Route("GetCategoryAll")]
+    public async Task<IActionResult> GetCategoryAll()
     {
         var categories = await _categoryRepository.GetAllAsync();
         return Ok(categories);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    [HttpGet]
+    [Route("GetCategoryById")]
+    public async Task<IActionResult> GetCategoryByID(int id)
     {
         var category = await _categoryRepository.GetByIdAsync(id);
         if (category == null) return NotFound();
@@ -29,16 +31,17 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Category category)
+    [Route("CreateCategory")]
+    public async Task<IActionResult> CreateCategory(Category category)
     {
         var created = await _categoryRepository.AddAsync(category);
         return Ok(created);
     }
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Category category)
+    [HttpPut]
+    [Route("UpdateCategoryById")]
+    public async Task<IActionResult> UpdateCategoryById(int id, Category category)
     {
-        if (id != category.Id)
-            return BadRequest("ID mismatch");
+        
 
         var exists = await _categoryRepository.GetByIdAsync(id);
         if (exists == null) return NotFound();
@@ -47,8 +50,9 @@ public class CategoriesController : ControllerBase
         return Ok(category);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    [HttpDelete]
+    [Route("DeleteCategoryById")]
+    public async Task<IActionResult> DeleteCategoryById(int id)
     {
         var success = await _categoryRepository.DeleteAsync(id);
         if (!success) return NotFound();

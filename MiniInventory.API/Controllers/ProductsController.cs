@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MiniInventory.API.Interfaces;
 using MiniInventory.API.Models;
+using MiniInventory.API.Repositories;
 
 namespace MiniInventory.API.Controllers
 {
@@ -13,43 +14,37 @@ namespace MiniInventory.API.Controllers
         public ProductsController(IProductRepository repo) => _repo = repo;
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        [Route("GetProductAll")]
+        public async Task<IActionResult> GetProductAll()
         {
             var products = await _repo.GetAllAsync();
 
-           
-        //    if (products == null || !products.Any())
-        //    {
-        //        products = new List<Product>
-        //{
-        //    new Product { Id = 1, Name = "Demo Mouse", Quantity = 10, Price = 250 },
-        //    new Product { Id = 2, Name = "Demo Keyboard", Quantity = 5, Price = 550 },
-        //    new Product { Id = 2, Name = "Demo PC", Quantity = 5, Price = 10000 }
-        //};
-        //    }
-
             return Ok(products);
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet]
+        [Route("GetProductById")]
+        public async Task<IActionResult> GetProductById(int id)
         {
             var p = await _repo.GetByIdAsync(id); return p == null ? NotFound() : Ok(p);
         }
-        [HttpPost] 
-        public async Task<IActionResult> Post(Product product) 
+        [HttpPost]
+        [Route("AddProduct")]
+        public async Task<IActionResult> AddProduct(Product product) 
         { 
             await _repo.AddAsync(product); 
-            return CreatedAtAction(nameof(Get), new { id = product.Id }, product); 
+            return CreatedAtAction(nameof(GetProductAll), new { id = product.Id }, product); 
         }
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Product p)
+        [HttpPut]
+        [Route("UpdateProductById")]
+        public async Task<IActionResult> UpdateProductById(int Id, Product product)
         {
-            if (id != p.Id) return BadRequest();
-            await _repo.UpdateAsync(p);
-            return NoContent();
+            var exists = await _repo.GetByIdAsync(Id);
+            await _repo.UpdateAsync(product);
+            return Ok(product);
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete]
+        [Route("DeleteProductById")]
+        public async Task<IActionResult> DeleteProductById(int id)
         {
             await _repo.DeleteAsync(id);
             return NoContent();

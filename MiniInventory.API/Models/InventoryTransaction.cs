@@ -1,6 +1,6 @@
 ﻿namespace MiniInventory.API.Models
 {
-    public class StockTransaction
+    public class InventoryTransaction
     {
 
         public int Id { get; set; }
