@@ -37,9 +37,10 @@ namespace MiniInventory.API.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateCustomer")]
-        public async Task<IActionResult> UpdateCustomer(Customer customer)
+        [Route("UpdateCustomerbyId")]
+        public async Task<IActionResult> UpdateCustomer(int id,Customer customer)
         {
+            customer.CustomerId = id;
             await _repo.UpdateAsync(customer);
             return Ok();
         }

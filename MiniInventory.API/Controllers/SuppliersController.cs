@@ -41,10 +41,10 @@ namespace MiniInventory.API.Controllers
         [HttpPut]
         [Route("UpdateSupplierById")]
 
-        public async Task<IActionResult> UpdateSupplier(Supplier supplier)
+        public async Task<IActionResult> UpdateSupplier(int id, Supplier supplier)
         {
-            await _repo.UpdateAsync(supplier);
-            return Ok();
+            var result=await _repo.UpdateAsync(id,supplier);
+            return Ok( result);
         }
 
         [HttpDelete]

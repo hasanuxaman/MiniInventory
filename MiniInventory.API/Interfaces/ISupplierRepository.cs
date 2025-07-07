@@ -7,7 +7,7 @@ namespace MiniInventory.API.Interfaces
         Task<IEnumerable<Supplier>> GetAllAsync();
         Task<Supplier?> GetByIdAsync(int id);
         Task<int> AddAsync(Supplier supplier);
-        Task<int> UpdateAsync(Supplier supplier);
+        Task<int> UpdateAsync(int id,Supplier supplier);
         Task<int> DeleteAsync(int id);
     }
 }

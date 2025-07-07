@@ -36,17 +36,29 @@ namespace MiniInventory.API.Repositories
             return await conn.ExecuteAsync(sql, supplier);
         }
 
-        public async Task<int> UpdateAsync(Supplier supplier)
+        public async Task<int> UpdateAsync(int id, Supplier supplier)
         {
+            supplier.SupplierId = id;
             using var conn = new SqlConnection(_connectionString);
             var sql = @"UPDATE Supplier SET 
-                            SupplierName = @SupplierName, 
-                            ContactName = @ContactName, 
-                            Phone = @Phone, 
-                            Email = @Email 
-                        WHERE SupplierId = @SupplierId";
-            return await conn.ExecuteAsync(sql, supplier);
+                    SupplierName = @SupplierName, 
+                    ContactName = @ContactName, 
+                    Phone = @Phone, 
+                    Email = @Email 
+                WHERE SupplierId = @SupplierId";
+            try
+            {
+                var rowsAffected = await conn.ExecuteAsync(sql,  supplier);
+                Console.WriteLine($"Rows affected: {rowsAffected}");
+                return rowsAffected;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Update Error: {ex.Message}");
+                throw;
+            }
         }
+    
 
         public async Task<int> DeleteAsync(int id)
         {

@@ -1,0 +1,28 @@
+﻿@page "{id:int}"
+@model MiniInventory.UI.Pages.Customers.EditModel
+@{
+    ViewData["Title"] = "Edit Customer";
+}
+
+<h2>Edit Customer</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Customer.CustomerName" class="form-label"> Customer Name</label>
+        <input asp-for="Customer.CustomerName" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Customer.Email" class="form-label"></label>
+        <input asp-for="Customer.Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Customer.Phone" class="form-label"></label>
+        <input asp-for="Customer.Phone" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Customer.Address" class="form-label"></label>
+        <input asp-for="Customer.Address" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>

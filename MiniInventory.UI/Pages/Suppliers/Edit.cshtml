@@ -1,0 +1,28 @@
+﻿@page
+@model MiniInventory.UI.Pages.Suppliers.EditModel
+@{
+    ViewData["Title"] = "Edit Supplier";
+}
+
+<h2>Edit Supplier</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Supplier.SupplierName" class="form-label">Supplier Name</label>
+        <input asp-for="Supplier.SupplierName" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Supplier.ContactName" class="form-label">Contact Name</label>
+        <input asp-for="Supplier.ContactName" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Supplier.Phone" class="form-label"></label>
+        <input asp-for="Supplier.Phone" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Supplier.Email" class="form-label"></label>
+        <input asp-for="Supplier.Email" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
