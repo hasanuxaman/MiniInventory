@@ -1,13 +1,12 @@
-﻿namespace MiniInventory.UI.Models
+﻿namespace MiniInventory.API.DTOs
 {
-    public class StockReport
+    public class StockReportDto
     {
         public int ProductId { get; set; }
         public string? ProductName { get; set; }
         public string? CategoryName { get; set; }
         public int CurrentStock { get; set; }
-        public DateTime ReportDate { get; set; }
         public decimal UnitPrice { get; set; }
-        public string? Unit { get; set; }
+        public string Unit { get; set; }
     }
 }

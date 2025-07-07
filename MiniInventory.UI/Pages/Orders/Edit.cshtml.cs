@@ -25,19 +25,19 @@ namespace MiniInventory.UI.Pages.Orders
         public async Task<IActionResult> OnGetAsync()
         {
             
-            Order = await _httpClient.GetFromJsonAsync<Order>($"Orders/GetOrderById/{Id}") ?? new Order();
+            Order = await _httpClient.GetFromJsonAsync<Order>($"Orders/GetOrderById?id={Id}") ?? new Order();
             Order.OrderDetails ??= new List<OrderDetail>();
 
-           
-            Products = await _httpClient.GetFromJsonAsync<List<Product>>("products") ?? new();
-            Customers = await _httpClient.GetFromJsonAsync<List<Customer>>("customers") ?? new();
+          
+            Products = await _httpClient.GetFromJsonAsync<List<Product>>("Products/GetProductAll") ?? new();
+            Customers = await _httpClient.GetFromJsonAsync<List<Customer>>("Customers/GetAllCustomer") ?? new();
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var response = await _httpClient.PutAsJsonAsync($"api/orders/UpdateOrder/{Id}", Order);
+            var response = await _httpClient.PutAsJsonAsync($"Orders/UpdateOrderbyId?id={Id}", Order);
 
             if (response.IsSuccessStatusCode)
                 return RedirectToPage("Index");
@@ -49,13 +49,13 @@ namespace MiniInventory.UI.Pages.Orders
 
         public async Task<IActionResult> OnPostDeleteAsync()
         {
-            var response = await _httpClient.DeleteAsync($"api/orders/DeleteOrder/{Id}");
+            var response = await _httpClient.DeleteAsync($"Orders/DeleteOrderById?id={Id}");
 
             if (response.IsSuccessStatusCode)
                 return RedirectToPage("Index");
 
             ModelState.AddModelError(string.Empty, "Order deletion failed.");
-            await OnGetAsync();
+            await OnGetAsync(); 
             return Page();
         }
     }

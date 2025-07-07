@@ -11,7 +11,7 @@ namespace MiniInventory.API.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         
-        public DbSet<ProductStock> ProductStocks { get; set; } 
+        public DbSet<ProductCurrentStocks> ProductCurrentStocks { get; set; } 
         public DbSet<InventoryTransaction> StockTransactions { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }

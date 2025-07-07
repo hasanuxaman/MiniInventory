@@ -1,0 +1,41 @@
+﻿@page
+@model MiniInventory.UI.Pages.Stock.StockReportModel
+@{
+    ViewData["Title"] = "Stock Report";
+}
+
+<h2>Stock Report</h2>
+<div class="card-body">
+    <table class="table table-bordered table-sm table-striped table-hover">
+        <thead class="table-primary">
+        <tr>
+            <th>Product Name</th>
+            <th>Category Name</th>
+            <th>Current Stock</th>
+            <th>Unit Price</th>
+            <th>Unit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.StockReports != null && Model.StockReports.Any())
+        {
+            foreach (var item in Model.StockReports)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.CurrentStock</td>
+                    <td>@item.UnitPrice.ToString("0.00")</td>
+                    <td>@item.Unit</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">No data available.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

@@ -21,6 +21,12 @@ namespace MiniInventory.UI.Pages.Orders
 
         public async Task OnGetAsync()
         {
+            Order = new Order
+            {
+                OrderDate = DateTime.Today,
+                Status = "Approved"
+            };
+            
             Products = await _httpClient.GetFromJsonAsync<List<Product>>("Products/GetProductAll") ?? new();
             Customers = await _httpClient.GetFromJsonAsync<List<Customer>>("Customers/GetAllCustomer") ?? new();
 

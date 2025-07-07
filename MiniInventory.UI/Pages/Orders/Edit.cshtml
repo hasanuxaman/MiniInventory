@@ -1,4 +1,4 @@
-﻿@page "{id:int}"
+﻿@page
 @model MiniInventory.UI.Pages.Orders.EditModel
 @{
     ViewData["Title"] = "Edit Order";
@@ -39,9 +39,7 @@
                 <th>Product</th>
                 <th>Quantity</th>
                 <th>Unit Price</th>
-                <th>
-                    <button type="button" class="btn btn-sm btn-primary" onclick="addRow()">Add</button>
-                </th>
+                <th><button type="button" class="btn btn-sm btn-primary" onclick="addRow()">Add</button></th>
             </tr>
         </thead>
         <tbody id="detailsTable">
@@ -59,8 +57,12 @@
                             }
                         </select>
                     </td>
-                    <td><input name="Order.OrderDetails[@i].Quantity" value="@Model.Order.OrderDetails[i].Quantity" class="form-control" /></td>
-                    <td><input name="Order.OrderDetails[@i].UnitPrice" value="@Model.Order.OrderDetails[i].UnitPrice" class="form-control" /></td>
+                    <td>
+                        <input name="Order.OrderDetails[@i].Quantity" value="@Model.Order.OrderDetails[i].Quantity" class="form-control" />
+                    </td>
+                    <td>
+                        <input name="Order.OrderDetails[@i].UnitPrice" value="@Model.Order.OrderDetails[i].UnitPrice" class="form-control" />
+                    </td>
                     <td>
                         <button type="button" class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button>
                     </td>
@@ -78,24 +80,28 @@
 
 @section Scripts {
     <script>
+        const products = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Products));
+
         function addRow() {
             const table = document.getElementById("detailsTable");
             const rowCount = table.rows.length;
             const row = table.insertRow();
+
+            let options = '<option value="">-- Select Product --</option>';
+            for (const p of products) {
+                options += `<option value="${p.Id}">${p.Name}</option>`;
+            }
+
             row.innerHTML = `
-                <td>
-                    <select name="Order.OrderDetails[${rowCount}].ProductId" class="form-control">
-                        <option value="">-- Select Product --</option>
-                        @foreach (var product in Model.Products)
-                        {
-                            <option value="@product.ProductId">@product.ProductName</option>
-                        }
-                    </select>
-                </td>
-                <td><input name="Order.OrderDetails[${rowCount}].Quantity" class="form-control" /></td>
-                <td><input name="Order.OrderDetails[${rowCount}].UnitPrice" class="form-control" /></td>
-                <td><button type="button" class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button></td>
-            `;
+                        <td>
+                            <select name="Order.OrderDetails[${rowCount}].ProductId" class="form-control">
+                                ${options}
+                            </select>
+                        </td>
+                        <td><input name="Order.OrderDetails[${rowCount}].Quantity" class="form-control" /></td>
+                        <td><input name="Order.OrderDetails[${rowCount}].UnitPrice" class="form-control" /></td>
+                        <td><button type="button" class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button></td>
+                    `;
         }
 
         function removeRow(button) {

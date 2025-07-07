@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniInventory.UI.Models;
 
-namespace MiniInventory.UI.Pages.Orders
+namespace MiniInventory.UI.Pages.Categories
 {
     public class IndexModel : PageModel
     {
@@ -12,26 +12,23 @@ namespace MiniInventory.UI.Pages.Orders
         {
             _httpClient = httpClientFactory.CreateClient("API");
         }
-
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
-        public List<Order> Orders { get; set; }
+
+        public List<Category> Categories { get; set; } = new();
 
         public async Task OnGetAsync()
         {
-            Orders = await _httpClient.GetFromJsonAsync<List<Order>>("Orders/GetAllOrder");
+            Categories = await _httpClient.GetFromJsonAsync<List<Category>>("Categories/GetCategoryAll") ?? new();
         }
-
-        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        public async Task<IActionResult> OnPostDeleteAsync()
         {
-            var response = await _httpClient.DeleteAsync($"Orders/DeleteOrderById?id={Id}");
-
+            var response = await _httpClient.DeleteAsync($"Categories/DeleteCategoryById?id={Id}");
             if (response.IsSuccessStatusCode)
-                return RedirectToPage(); 
+                return RedirectToPage("Index");
 
-            ModelState.AddModelError(string.Empty, "Delete failed.");
+            ModelState.AddModelError(string.Empty, "Delete failed");
             return Page();
         }
-
     }
 }

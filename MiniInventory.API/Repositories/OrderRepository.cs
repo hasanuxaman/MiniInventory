@@ -84,7 +84,6 @@ namespace MiniInventory.API.Repositories
 
             try
             {
-              
                 var orderSql = @"INSERT INTO [Order] (CustomerId, OrderDate, Status)
                          VALUES (@CustomerId, @OrderDate, @Status);
                          SELECT CAST(SCOPE_IDENTITY() AS INT);";
@@ -96,18 +95,29 @@ namespace MiniInventory.API.Repositories
                     orderDto.Status
                 }, tran);
 
-          
                 var detailSql = @"INSERT INTO OrderDetail (OrderId, ProductId, Quantity, UnitPrice)
                           VALUES (@OrderId, @ProductId, @Quantity, @UnitPrice);";
 
+                var updateStockSql = @"UPDATE ProductCurrentStocks
+                               SET CurrentStock = CurrentStock - @Quantity
+                               WHERE ProductId = @ProductId;";
+
                 foreach (var detail in orderDto.OrderDetails)
                 {
+                    
                     await conn.ExecuteAsync(detailSql, new
                     {
                         OrderId = orderId,
                         detail.ProductId,
                         detail.Quantity,
                         detail.UnitPrice
+                    }, tran);
+
+                    
+                    await conn.ExecuteAsync(updateStockSql, new
+                    {
+                        detail.ProductId,
+                        detail.Quantity
                     }, tran);
                 }
 

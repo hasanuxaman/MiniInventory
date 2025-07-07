@@ -19,7 +19,7 @@ namespace MiniInventory.UI.Pages.Stock
         {
             var client = _httpClientFactory.CreateClient("API");
 
-            var result = await client.GetFromJsonAsync<List<StockTransaction>>("stock");
+            var result = await client.GetFromJsonAsync<List<StockTransaction>>("InventoryTransactions/GetAllStockTransectionl");
 
             if (result != null)
                 Transactions = result;

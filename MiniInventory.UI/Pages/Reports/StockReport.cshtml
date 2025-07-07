@@ -1,23 +1,28 @@
 ﻿@page
 @model MiniInventory.UI.Pages.Reports.StockReportModel
 <h2>Stock Report</h2>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Current Stock</th>
-            <th>Last Transaction</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var report in Model.ReportList)
-        {
+<div class="card-body">
+    <table class="table table-bordered table-sm table-striped table-hover">
+        <thead class="table-primary">
             <tr>
-                <td>@report.ProductName</td>
-                <td>@report.CurrentStock</td>
-                <td>@report.LastTransactionDate?.ToString("yyyy-MM-dd") ?? "N/A"</td>
+                <th>Product</th>
+                <th>Unit</th>
+                <th>Unit Price</th>
+                <th>Current Stock</th>
+                <th>Report Date</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var report in Model.ReportList)
+            {
+                <tr>
+                    <td>@report.ProductName</td>
+                    <td>@report.Unit</td>
+                    <td>@report.UnitPrice</td>
+                    <td>@report.CurrentStock</td>
+                    <td>@report.ReportDate.ToString("yyyy-MM-dd") ?? "N/A"</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -18,11 +18,19 @@ namespace MiniInventory.API.Repositories
             _connectionString = config.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<ProductDto>> GetAllAsync()
         {
             using var connection = new SqlConnection(_connectionString);
-            var sql = "SELECT * FROM Products";
-            return await connection.QueryAsync<Product>(sql);
+            var sql = @"SELECT p.Id
+      ,p.Name
+      ,p.UnitPrice
+      ,p.CategoryId
+      ,p.Unit
+	  ,c.Name as CategoryName
+	  
+  FROM Products p
+  left join Categories  c  on p.CategoryId=c.Id";
+            return await connection.QueryAsync<ProductDto>(sql);
         }
 
         public async Task<Product?> GetByIdAsync(int id)
@@ -35,14 +43,14 @@ namespace MiniInventory.API.Repositories
         public async Task AddAsync(Product product)
         {
             using var connection = new SqlConnection(_connectionString);
-            var sql = "INSERT INTO Products (Name, Quantity, Price, CategoryId) VALUES (@Name, @Quantity, @Price, @CategoryId)";
+            var sql = "INSERT INTO Products (Name, Unit,UnitPrice, CategoryId) VALUES (@Name, @Unit, @UnitPrice, @CategoryId)";
             await connection.ExecuteAsync(sql, product);
         }
 
         public async Task UpdateAsync(Product product)
         {
             using var connection = new SqlConnection(_connectionString);
-            var sql = "UPDATE Products SET Name=@Name, Quantity=@Quantity, Price=@Price, CategoryId=@CategoryId WHERE Id=@Id";
+            var sql = "UPDATE Products SET Name=@Name,Unit=@Unit,  UnitPrice=@UnitPrice, CategoryId=@CategoryId WHERE Id=@Id";
             await connection.ExecuteAsync(sql, product);
         }
 

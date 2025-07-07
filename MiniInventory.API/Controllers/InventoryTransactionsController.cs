@@ -18,20 +18,29 @@ namespace MiniInventory.API.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllStockTransectionl")]
         public async Task<IActionResult> GetAll() => Ok(await _repo.GetAllAsync());
 
-        [HttpGet("product/{productId}")]
-        public async Task<IActionResult> GetByProductId(int productId)
+        [HttpGet]
+        [Route("GetStockTransectionlByProductId")]
+        public async Task<IActionResult> GetStockTransectionlByProductId(int productId)
         {
             var transactions = await _repo.GetByProductIdAsync(productId);
             return Ok(transactions);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(InventoryTransaction transaction)
+        [Route("AddStockTransectionl")]
+        public async Task<IActionResult> AddStockTransectionl(InventoryTransaction transaction)
         {
-            await _repo.AddAsync(transaction);
-            return Ok();
+            
+            var result = await _repo.AddAsync(transaction);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("", result.Message);
+                return  BadRequest(result.Message);
+            }
+            return Ok("Stock transaction saved successfully.");
         }
     }
 

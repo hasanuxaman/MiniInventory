@@ -1,30 +1,36 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniInventory.UI.Models;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Text.Json;
 
 namespace MiniInventory.UI.Pages.Products
 {
     public class IndexModel : PageModel
     {
+        private readonly HttpClient _httpClient;
+        public IndexModel(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient("API");
+        }
         public List<Product> Products { get; set; } = [];
 
         public async Task OnGetAsync()
         {
-            using var httpClient = new HttpClient();
+  
+             Products = await _httpClient.GetFromJsonAsync <List<Product>> ("Products/GetProductAll") ?? new();
 
-            string apiUrl = "https://localhost:7004/api/Products/GetProductAll";
 
-            var response = await httpClient.GetAsync(apiUrl);
-
+        }
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"Products/DeleteProductById?id={id}");
             if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                Products = JsonSerializer.Deserialize<List<Product>>(json, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-            }
+                return RedirectToPage("Index");
+
+            ModelState.AddModelError(string.Empty, "Delete failed");
+            return Page();
         }
     }
 }

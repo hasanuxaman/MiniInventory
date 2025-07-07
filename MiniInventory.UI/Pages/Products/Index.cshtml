@@ -8,13 +8,14 @@
 <h1>Products</h1>
 
 <a asp-page="Create" class="btn btn-primary mb-2">+ Add New Product</a>
-
-<table class="table table-bordered table-striped">
-    <thead>
+<div class="card-body">
+    <table class="table table-bordered table-sm table-striped table-hover">
+        <thead class="table-primary">
         <tr>
             <th>Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
+            <th>Category</th>
+            <th>Unit</th>
+            <th>UnitPrice</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -25,8 +26,9 @@
             {
                 <tr>
                     <td>@product.Name</td>
-                    <td>@product.Quantity</td>
-                    <td>@product.Price.ToString("C")</td>
+                    <td>@product.CategoryName</td>
+                    <td>@product.Unit</td>
+                    <td>@product.UnitPrice.</td>
                     <td>
                         <a asp-page="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-page="Delete" asp-route-id="@product.Id" class="btn btn-sm btn-danger">Delete</a>
@@ -42,4 +44,4 @@
         }
     </tbody>
 </table>
-
+</div>

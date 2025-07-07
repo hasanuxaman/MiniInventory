@@ -8,11 +8,13 @@
 <h2 class="mb-4">Stock Transactions</h2>
 
 <a asp-page="ManageStock" class="btn btn-primary mb-3">+ Stock In/Out</a>
-
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
+<div class="card-body">
+    <table class="table table-bordered table-sm table-striped table-hover">
+        <thead class="table-primary">
         <tr>
+            <td>ProductId</td>
             <th>Product</th>
+           @*  <th >Current Stock</th> *@
             <th>Quantity</th>
             <th>Type</th>
             <th>Transaction Date</th>
@@ -24,6 +26,7 @@
             <tr>
                 <td>@item.ProductId</td>
                 <td>@item.ProductName</td>
+                @* <td>@item.ProductCurrentStock</td> *@
                 <td>@item.Quantity</td>
                 <td>@item.Type</td>
                 <td>@item.TransactionDate.ToString("yyyy-MM-dd")</td>
@@ -31,3 +34,4 @@
         }
     </tbody>
 </table>
+</div>

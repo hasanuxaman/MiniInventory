@@ -11,41 +11,54 @@ namespace MiniInventory.UI.Pages.Stock
     {
         private readonly IHttpClientFactory _httpFactory;
 
-        public ManageStockModel(IHttpClientFactory httpFactory)
+        private readonly IHttpClientFactory _clientFactory;
+
+        public ManageStockModel(IHttpClientFactory clientFactory)
         {
-            _httpFactory = httpFactory;
+            _clientFactory = clientFactory;
         }
 
         [BindProperty]
-        public List<StockTransaction> Transactions { get; set; } = new();
+        public StockTransaction Transaction { get; set; }
+  
+ 
 
-        public List<SelectListItem> Products { get; set; } = new();
+        public List<SelectListItem> ProductList { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            var client = _httpFactory.CreateClient("API");
-            var products = await client.GetFromJsonAsync<List<Product>>("products");
+            var client = _clientFactory.CreateClient("API");
+            var products = await client.GetFromJsonAsync<List<Product>>("Products/GetProductAll");
 
-            if (products != null)
+            ProductList = products.Select(p => new SelectListItem
             {
-                Products = products.Select(p =>
-                    new SelectListItem { Value = p.Id.ToString(), Text = p.Name }).ToList();
-            }
+                Value = p.Id.ToString(),
+                Text = p.Name
+            }).ToList();
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var client = _httpFactory.CreateClient("API");
-
-            foreach (var trx in Transactions)
+            if (!ModelState.IsValid)
             {
-                if (trx.Type == "IN")
-                    await client.PostAsJsonAsync("stock/in", trx);
-                else if (trx.Type == "OUT")
-                    await client.PostAsJsonAsync("stock/out", trx);
+                await OnGetAsync(); 
+                return Page();
             }
 
-            return RedirectToPage("Index");
+            var client = _clientFactory.CreateClient("API");
+            var response = await client.PostAsJsonAsync("InventoryTransactions/AddStockTransectionl", Transaction);
+
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Stock transaction saved successfully.";
+                return RedirectToPage("Index");
+            }
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            TempData["ErrorMessage"] = $"{response.StatusCode}: {errorMessage}";
+            await OnGetAsync();
+            return Page();
         }
     }
 }
