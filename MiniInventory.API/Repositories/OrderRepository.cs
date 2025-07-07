@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using MiniInventory.API.DTOs;
 using MiniInventory.API.Interfaces;
 using MiniInventory.API.Models;
 
@@ -14,31 +15,33 @@ namespace MiniInventory.API.Repositories
             _connectionString = config.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+        public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
         {
             using var conn = new SqlConnection(_connectionString);
 
             var sql = @"
-        SELECT o.OrderId, o.CustomerId, o.OrderDate, o.Status,
-               d.ProductId, d.Quantity, d.UnitPrice
+        SELECT o.OrderId, o.CustomerId, c.CustomerName, o.OrderDate, o.Status,
+               d.ProductId, p.Name AS ProductName, p.Unit, d.Quantity, d.UnitPrice
         FROM [Order] o
         LEFT JOIN OrderDetail d ON o.OrderId = d.OrderId
-        ORDER BY o.OrderId DESC;";
+        LEFT JOIN Customer c ON o.CustomerId = c.CustomerId
+        LEFT JOIN Products p ON d.ProductId = p.Id
+        ORDER BY o.OrderId DESC";
 
-            var orderDict = new Dictionary<int, Order>();
+            var orderDict = new Dictionary<int, OrderDto>();
 
-            var result = await conn.QueryAsync<Order, OrderDetail, Order>(
+            var result = await conn.QueryAsync<OrderDto, OrderDetailDto, OrderDto>(
                 sql,
                 (order, detail) =>
                 {
                     if (!orderDict.TryGetValue(order.OrderId, out var currentOrder))
                     {
                         currentOrder = order;
-                        currentOrder.OrderDetails = new List<OrderDetail>();
+                        currentOrder.OrderDetails = new List<OrderDetailDto>();
                         orderDict.Add(order.OrderId, currentOrder);
                     }
 
-                    if (detail != null)
+                    if (detail?.ProductId != 0)
                     {
                         currentOrder.OrderDetails.Add(detail);
                     }
@@ -50,6 +53,7 @@ namespace MiniInventory.API.Repositories
 
             return orderDict.Values;
         }
+
 
         public async Task<Order> GetOrderByIdAsync(int orderId)
         {

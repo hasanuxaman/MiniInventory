@@ -11,4 +11,5 @@
 
         public ICollection<OrderDetail>? OrderDetails { get; set; }
     }
+
 }

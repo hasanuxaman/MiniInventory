@@ -12,6 +12,7 @@
         <div class="card-header bg-primary text-white">
             <strong>Order ID:</strong> @order.OrderId |
             <strong>Customer ID:</strong> @order.CustomerId |
+            <strong>Customer Name:</strong> @order.CustomerName |
             <strong>Date:</strong> @order.OrderDate.ToShortDateString() |
             <strong>Status:</strong> @order.Status
         </div>
@@ -20,6 +21,8 @@
                 <thead>
                     <tr>
                         <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th> Unit</th>
                         <th>Quantity</th>
                         <th>Unit Price</th>
                     </tr>
@@ -29,6 +32,8 @@
                     {
                         <tr>
                             <td>@item.ProductId</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.Unit</td>
                             <td>@item.Quantity</td>
                             <td>@item.UnitPrice</td>
                         </tr>
